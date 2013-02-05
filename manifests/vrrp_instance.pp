@@ -2,6 +2,7 @@ define keepalived::vrrp_instance(
   $kind,
   $interface,
   $virtual_router_id = 10,
+  $nopreempt = false,
   $advert_int = 1,
   $password = false,
   $virtual_addresses,
@@ -9,7 +10,9 @@ define keepalived::vrrp_instance(
   $notify_backup = false,
   $notify_fault = false,
   $notify_all = false,
-  $smtp_alert = false
+  $smtp_alert = false,
+  $track_script = false,
+  $track_interfaces = false,
 ) {
 
   if($kind != "MASTER" and $kind != "BACKUP") {
@@ -21,7 +24,7 @@ define keepalived::vrrp_instance(
     "keepalived.vrrp_instance_${name}":
       content => template("keepalived/vrrp_instance.erb"),
       target  => '/etc/keepalived/concat/top',
-      order   => 03;
+      order   => 04;
   }
 
 }

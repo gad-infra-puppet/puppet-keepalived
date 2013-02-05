@@ -19,11 +19,12 @@ define keepalived::real_server(
 
   $connect_port = false,
 
+  $misc_cmd = false,
   $helo_name = "loadbalancer.healthcheck.local"
 ) {
 
   validate_bool($inhibit_on_failure)
-  validate_re($check_type, ['HTTP', 'SSL', 'TCP', 'SMTP'])
+  validate_re($check_type, ['HTTP', 'SSL', 'TCP', 'SMTP', 'MISC'])
 
   concat::fragment {
     "keepalived.virtual_server.${virtual_server_ip}.${virtual_server_port}.real_server.${ip}":

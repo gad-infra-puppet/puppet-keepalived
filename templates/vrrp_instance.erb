@@ -2,31 +2,52 @@ vrrp_instance <%= name %> {
   state <%= kind %>
   interface <%= interface %>
   virtual_router_id <%= virtual_router_id %>
-  priority <%= kind == "MASTER" ? 200 : 100 %>
+  priority <%= kind == "MASTER" ? 101 : 100 %>
+<% if nopreempt -%>
+  <%= nopreempt %>  
+<% end -%>
   advert_int <%= advert_int %>
+
 <% if password -%>
   authentication {
     auth_type pass
     auth_pass <%= password %>
   }
 <% end -%>
+
+<% if track_script -%>
+  track_script {
+    <%= track_script %>
+  }
+<% end -%>
+
+<% if track_interfaces -%>
+  track_interface {
+<% track_interfaces.each do |va_line| -%>
+   <%= va_line %>
+<% end -%>
+  }
+<% end -%>
+
   virtual_ipaddress {
 <% virtual_addresses.each do |va_line| -%>
    <%= va_line %>
 <% end -%>
   }
+
 <% if notify_master -%>
-  notify_master "<%= notify_master %>  
+  notify_master "<%= notify_master %>"
 <% end -%>
 <% if notify_backup -%>
-  notify_backup "<%= notify_backup %>
+  notify_backup "<%= notify_backup %>"
 <% end -%>
 <% if notify_fault -%>
-  notify_fault "<%= notify_fault %>
+  notify_fault "<%= notify_fault %>"
 <% end -%>
 <% if notify_all -%>
-  notify "<%= notify_all %>
+  notify "<%= notify_all %>"
 <% end -%>
+
 <% if smtp_alert -%>
   smtp_alert
 <% end -%>

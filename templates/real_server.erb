@@ -61,6 +61,15 @@
       connect_timeout <%= connect_timeout %>
 <% end -%>
     }
+<% when 'MISC' -%>
+    MISC_CHECK {
+<% if connect_timeout -%>
+      connect_timeout <%= connect_timeout %>
+<% end -%>
+<% if misc_cmd -%>
+      misc_path "<%= misc_cmd %>"
+<% end -%>
+    }
 <% else -%>
 <% raise "unknown check #{check_type}" %>
 <% end -%>
