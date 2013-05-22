@@ -17,7 +17,13 @@ vrrp_instance <%= name %> {
 
 <% if track_script -%>
   track_script {
+  <%- if track_script.is_a?(Array) -%>
+    <%- track_script.each do |s| -%>
+    <%= s %>
+    <%- end -%>
+  <%- else -%>
     <%= track_script %>
+  <%- end -%>
   }
 <% end -%>
 
