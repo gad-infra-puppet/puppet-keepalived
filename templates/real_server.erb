@@ -7,9 +7,7 @@
 <% case check_type -%>
 <% when 'HTTP','SSL' -%>
     <%= check_type %>_GET {
-<% if connect_port -%>
-      connect_port <%= connect_port %>
-<% end -%>
+      connect_port <%= connect_port || port %>
 <% if bindto -%>
       bindto <%= bindto %>
 <% end -%>
