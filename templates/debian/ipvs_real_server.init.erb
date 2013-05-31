@@ -11,24 +11,17 @@
 # Description:       Controls ipvs real server. (using IPVS-DSR)
 #                   
 ### END INIT INFO
-#
-#
-#!/bin/sh
-#
-# vsnode Controle the Virtual Server Node (using IPVS-DSR)
-#
-# chkconfig: - 89 11
-# description: ipvs lb node
-# config: /etc/sysconfig/vsnode
 
 . /lib/lsb/init-functions
 
 RETVAL=0
 
-PROG="ipvs_real_server"
-DESC="IPVS Real Server Node"
 ALIAS_NUM=<%= octet_id %>
 VIRTUAL_IP=<%= virtual_server_ip %>
+
+PROG="ipvs_real_server_${ALIAS_NUM}"
+DESC="IPVS Real Server Node ${ALIAS_NUM}"
+
 LOCK=/var/lock/$PROG
 
 
