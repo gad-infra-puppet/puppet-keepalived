@@ -1,6 +1,6 @@
 #
 ### BEGIN INIT INFO
-# Provides:          ipvs_real_server
+# Provides:          ipvs_real_server_<%= octet_id %>
 # Required-Start:    
 # Required-Stop:     
 # Should-Start:      
@@ -29,10 +29,11 @@ start(){
   echo -n "Starting ${DESC}: "
   if [ ! -f $LOCK ]; then
     /sbin/ip addr add $VIRTUAL_IP/32 dev lo label lo:$ALIAS_NUM brd $VIRTUAL_IP
-    /sbin/ip route add $VIRTUAL_IP/32 dev lo:$ALIAS_NUM
+    ### /sbin/ip route add $VIRTUAL_IP/32 dev lo:$ALIAS_NUM
     [ $RETVAL -eq 0 ] && touch $LOCK
+    echo "OK."
   else
-    echo "ipvs virtual ip is already added. Do nothing."    
+    echo "Failure. Virtual ip is already added."    
   fi
 
 }
@@ -41,10 +42,11 @@ stop(){
   echo -n "Stopping ${DESC}: "
   if [ -f $LOCK ]; then
     /sbin/ip addr del $VIRTUAL_IP/32 dev lo label lo:$ALIAS_NUM brd $VIRTUAL_IP
-    /sbin/ip route del $VIRTUAL_IP/32 dev lo:$ALIAS_NUM
+    ### /sbin/ip route del $VIRTUAL_IP/32 dev lo:$ALIAS_NUM
     [ $RETVAL -eq 0 ] && rm -f $LOCK
+    echo "OK."
   else
-    echo "ipvs virtual ip is not existed. Do nothing."    
+    echo "Failure. Virtual ip is not existed yet."    
   fi
 
 }
