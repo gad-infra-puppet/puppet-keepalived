@@ -4,6 +4,7 @@ define keepalived::ipvs_real_server($virtual_server_ip, $health_check_file=false
 
   file { "/etc/init.d/${service_name}" :
     ensure  => present,
+    mode    => '0755',
     content => template('keepalived/debian/ipvs_real_server.init.erb'),
   }
 
