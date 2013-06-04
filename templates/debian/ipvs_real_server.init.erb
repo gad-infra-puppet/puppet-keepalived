@@ -23,14 +23,19 @@ PROG="ipvs_real_server_${ALIAS_NUM}"
 DESC="IPVS Real Server Node ${ALIAS_NUM}"
 
 LOCK=/var/lock/$PROG
+<%- if health_check_file -%>
+HEALTH_FILE=<%= health_check_file %>
+<%- end -%> 
 
 
 start(){
   echo -n "Starting ${DESC}: "
   if [ ! -f $LOCK ]; then
     /sbin/ip addr add $VIRTUAL_IP/32 dev lo label lo:$ALIAS_NUM brd $VIRTUAL_IP
-    /sbin/ip route add $VIRTUAL_IP/32 dev lo:$ALIAS_NUM
-    [ $RETVAL -eq 0 ] && touch $LOCK
+<%- if health_check_file -%>
+    chmod 666 $HEALTH_FILE
+<%- end -%>
+    [ $RETVAL -eq 0 ] && touch $LOCK && echo "OK." 
   else
     echo "ipvs virtual ip is already added. Do nothing."    
   fi
@@ -40,13 +45,36 @@ start(){
 stop(){
   echo -n "Stopping ${DESC}: "
   if [ -f $LOCK ]; then
+<%- if health_check_file -%>
+    chmod 600 $HEALTH_FILE
+    sleep 5
+<%- end -%>
     /sbin/ip addr del $VIRTUAL_IP/32 dev lo label lo:$ALIAS_NUM brd $VIRTUAL_IP
-    /sbin/ip route del $VIRTUAL_IP/32 dev lo:$ALIAS_NUM
-    [ $RETVAL -eq 0 ] && rm -f $LOCK
+    [ $RETVAL -eq 0 ] && rm -f $LOCK &&  echo "OK."
   else
     echo "ipvs virtual ip is not existed. Do nothing."    
   fi
 
+}
+
+halt(){
+  echo -n "Halt Virtual Server Node: "
+<%- if health_check_file -%>
+  chmod 600 $HEALTH_FILE && echo "OK." 
+<%- else -%>
+  echo "Do nothing."
+<%- end -%> 
+  [ $RETVAL -eq 0 ]
+}
+
+resume(){
+  echo -n "Resume Virtual Server Node: "
+<%- if health_check_file -%>
+  chmod 666 $HEALTH_FILE && echo "OK." 
+<%- else -%>
+  echo "Do nothing."
+<%- end -%>
+  [ $RETVAL -eq 0 ]
 }
 
 case "$1" in
@@ -56,7 +84,13 @@ case "$1" in
   stop)
     stop
     ;;
+  halt)
+    halt
+    ;;
+  resume)
+    resume
+    ;;
   *)
-    echo "Usage: $0 {start|stop}"
+    echo "Usage: $0 {start|stop|halt|resume}"
     exit 1
 esac

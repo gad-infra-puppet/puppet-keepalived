@@ -1,4 +1,4 @@
-define keepalived::ipvs_real_server($virtual_server_ip) {
+define keepalived::ipvs_real_server($virtual_server_ip, $health_check_file=false) {
   $octet_id = values_at(split($virtual_server_ip, '[.]'), 3)
   $service_name = "ipvs_real_server_${octet_id}"
 
