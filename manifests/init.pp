@@ -1,7 +1,7 @@
 class keepalived(
   $email,
   $smtp_server = '127.0.0.1',
-  $ensure_runing = true,
+  $ensure_running = true,
 ) {
 
   package {
@@ -9,7 +9,7 @@ class keepalived(
       ensure => installed;
   }
 
-  if $ensure_runing {
+  if $ensure_running {
     service {
       "keepalived":
         ensure     => running,
