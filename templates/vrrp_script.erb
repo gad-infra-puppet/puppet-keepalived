@@ -2,5 +2,7 @@ vrrp_script <%= name %> {
   script "<%= script_command %>"
   interval <%= interval %>
   weight   <%= weight %> 
+  fall 2 
+  rise 2
 }
 
