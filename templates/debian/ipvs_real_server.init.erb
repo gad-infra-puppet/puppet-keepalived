@@ -1,15 +1,15 @@
 #
 ### BEGIN INIT INFO
 # Provides:          ipvs_real_server_<%= octet_id %>
-# Required-Start:    
-# Required-Stop:     
-# Should-Start:      
-# Should-Stop:       
+# Required-Start:
+# Required-Stop:
+# Should-Start:
+# Should-Stop:
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Start and stop the mysql database server daemon
+# Short-Description: Start and stop ipvs real server vip.
 # Description:       Controls ipvs real server. (using IPVS-DSR)
-#                   
+#
 ### END INIT INFO
 
 . /lib/lsb/init-functions
@@ -25,7 +25,7 @@ DESC="IPVS Real Server Node ${ALIAS_NUM}"
 LOCK=/var/lock/$PROG
 <%- if health_check_file -%>
 HEALTH_FILE=<%= health_check_file %>
-<%- end -%> 
+<%- end -%>
 
 
 start(){
@@ -35,9 +35,9 @@ start(){
 <%- if health_check_file -%>
     chmod 666 $HEALTH_FILE
 <%- end -%>
-    [ $RETVAL -eq 0 ] && touch $LOCK && echo "OK." 
+    [ $RETVAL -eq 0 ] && touch $LOCK && echo "OK."
   else
-    echo "Failure. Virtual ip is already added."    
+    echo "Failure. Virtual ip is already added."
   fi
 
 }
@@ -52,7 +52,7 @@ stop(){
     /sbin/ip addr del $VIRTUAL_IP/32 dev lo label lo:$ALIAS_NUM brd $VIRTUAL_IP
     [ $RETVAL -eq 0 ] && rm -f $LOCK &&  echo "OK."
   else
-    echo "Failure. Virtual ip is not existed yet."    
+    echo "Failure. Virtual ip is not existed yet."
   fi
 
 }
@@ -60,17 +60,17 @@ stop(){
 halt(){
   echo -n "Halt Virtual Server Node: "
 <%- if health_check_file -%>
-  chmod 600 $HEALTH_FILE && echo "OK." 
+  chmod 600 $HEALTH_FILE && echo "OK."
 <%- else -%>
   echo "Do nothing."
-<%- end -%> 
+<%- end -%>
   [ $RETVAL -eq 0 ]
 }
 
 resume(){
   echo -n "Resume Virtual Server Node: "
 <%- if health_check_file -%>
-  chmod 666 $HEALTH_FILE && echo "OK." 
+  chmod 666 $HEALTH_FILE && echo "OK."
 <%- else -%>
   echo "Do nothing."
 <%- end -%>
