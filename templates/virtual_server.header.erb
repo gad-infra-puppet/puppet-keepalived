@@ -1,7 +1,7 @@
 virtual_server <%= ip %> <%= port %> {
   delay_loop <%= delay_loop %>
-  lb_algo <%= lb_algo %>
-  lb_kind <%= lb_kind %>
+  lvs_sched <%= lb_algo %>
+  lvs_method <%= lb_kind %>
   protocol <%= protocol %>
   persistence_timeout <%= persistence_timeout %>
 <% if sorry_server -%>
