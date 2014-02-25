@@ -6,7 +6,7 @@ define keepalived::real_server(
   $port,
   $weight = 10,
   $check_type,
-  $inhibit_on_failure = false,
+  $inhibit_on_failure = true,
 
   $delay_before_retry = 3,
   $nb_get_retry = 3,
